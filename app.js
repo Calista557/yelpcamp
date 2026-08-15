@@ -63,14 +63,11 @@ app.put("/campgrounds/:id", async (req, res) => {
   });
   res.redirect(`/campgrounds/${campground._id}`);
 });
-// app.get("/makecampground", async (req, res) => {
-//   const camp = new Campground({
-//     title: "My Backyard",
-//     description: "cheap camping",
-//   });
-//   await camp.save();
-//   res.send(camp);
-// });
+
+app.delete("/campgrounds/:id", async (req, res) => {
+  await Campground.findByIdAndDelete(req.params.id);
+  res.redirect("/campgrounds");
+});
 
 app.listen(3000, () => {
   console.log("Serving on Port 3000");
