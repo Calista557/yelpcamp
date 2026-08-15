@@ -10,6 +10,13 @@
     <h2><%= campground.location %></h2>
     <p><%= campground.description %></p>
 
-<a href="/campgrounds">Back to Campgrounds</a>
+
+<div>
+    <a href="/campgrounds/<%= campground._id %>/edit">Edit</a>
+</div>
+<div>
+    <a href="/campgrounds">Back to Campgrounds</a>
+</div>
+
 </body>
 </html>
