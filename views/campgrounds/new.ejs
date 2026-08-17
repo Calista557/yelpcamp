@@ -5,7 +5,7 @@
 
     <div class="col-6 offset-3 mb-4">
 
-        <form action="/campgrounds" method="POST">
+        <form action="/campgrounds" method="POST" novalidate class="validated-form">
 
             <div class="mb-3">
                 <label class="form-label" for="title">Title</label>
@@ -15,7 +15,16 @@
                     id="title"
                     name="campground[title]"
                     placeholder="Campground title"
+                    required
                 >
+
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+
+                <div class="invalid-feedback">
+                    Please provide a campground title.
+                </div>
             </div>
 
             <div class="mb-3">
@@ -26,7 +35,16 @@
                     id="location"
                     name="campground[location]"
                     placeholder="Campground location"
+                    required
                 >
+
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+
+                <div class="invalid-feedback">
+                    Please provide a campground location.
+                </div>
             </div>
 
             <div class="mb-3">
@@ -37,7 +55,17 @@
                     id="price"
                     name="campground[price]"
                     placeholder="Price"
+                    min="0"
+                    required
                 >
+
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+
+                <div class="invalid-feedback">
+                    Please provide a valid price.
+                </div>
             </div>
 
             <div class="mb-3">
@@ -48,7 +76,16 @@
                     name="campground[description]"
                     rows="4"
                     placeholder="Describe the campground"
+                    required
                 ></textarea>
+
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+
+                <div class="invalid-feedback">
+                    Please provide a description.
+                </div>
             </div>
 
             <div class="mb-3">
@@ -59,15 +96,22 @@
                     id="images"
                     name="campground[images]"
                     placeholder="https://example.com/image.jpg"
+                    required
                 >
+
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+
+                <div class="invalid-feedback">
+                    Please provide an image URL.
+                </div>
             </div>
 
             <div class="d-flex justify-content-between">
                 <button class="btn btn-success" type="submit">
                     Add Campground
                 </button>
-
-                
 
                 <a href="/campgrounds" class="btn btn-secondary">
                     Back to Campgrounds
