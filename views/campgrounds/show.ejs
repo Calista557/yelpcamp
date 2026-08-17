@@ -1,23 +1,61 @@
 <% layout("layouts/boilerplate") %>
 
-<h1><%= campground.title %></h1>
+<div class="row">
+    <div class="col-md-8 offset-md-2">
 
-<h2><%= campground.location %></h2>
+        <h1 class="mb-3"><%= campground.title %></h1>
 
-<% for (let image of campground.images) { %>
-    <img src="<%= image %>" alt="">
-<% } %>
+        <h5 class="fw-bold mb-3">
+            <%= campground.location %>
+        </h5>
 
-<p><%= campground.description %></p>
+        <% for (let image of campground.images) { %>
+            <img
+                src="<%= image %>"
+                class="img-fluid rounded mb-3"
+                alt="<%= campground.title %>"
+            >
+        <% } %>
 
-<div>
-    <a href="/campgrounds/<%= campground._id %>/edit">Edit</a>
+        <p class="mt-2">
+            <%= campground.description %>
+        </p>
+
+        <p class="fw-bold fs-5">
+            ₦<%= campground.price.toLocaleString() %>
+        </p>
+
+        <div class="border-top pt-3 mt-4 mb-4">
+            <div class="d-flex gap-2">
+
+                <a
+                    href="/campgrounds/<%= campground._id %>/edit"
+                    class="btn btn-warning"
+                >
+                    Edit
+                </a>
+
+                <a
+                    href="/campgrounds"
+                    class="btn btn-secondary"
+                >
+                    Back to Campgrounds
+                </a>
+
+                <form
+                    action="/campgrounds/<%= campground._id %>?_method=DELETE"
+                    method="POST"
+                >
+                    <button
+                        class="btn btn-danger"
+                        type="submit"
+                    >
+                        Delete
+                    </button>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
 </div>
-
-<div>
-    <a href="/campgrounds">Back to Campgrounds</a>
-</div>
-
-<form action="/campgrounds/<%= campground._id %>?_method=DELETE" method="POST">
-    <button type="submit">Delete</button>
-</form>
