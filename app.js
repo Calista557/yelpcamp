@@ -2,14 +2,11 @@ const express = require("express");
 const path = require("path");
 const mongoose = require("mongoose");
 const ejsMate = require("ejs-mate");
-// const catchAsync = require("./utils/catchAsync");
-// const Campground = require("./models/campground");
 const methodOverride = require("method-override");
 const ExpressError = require("./utils/ExpressError");
-// const Review = require("./models/review");
-// const { campgroundSchema, reviewSchema } = require("./schemas.js");
 const campgroundRoutes = require("./routes/campgrounds");
 const reviewRoutes = require("./routes/reviews");
+const session = require("express-session");
 
 mongoose.connect("mongodb://127.0.0.1:27017/yelp-camp");
 
@@ -27,33 +24,27 @@ app.set("views", path.join(__dirname, "views"));
 
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
+app.use(express.static(path.join(__dirname, "public")));
+
+const sessionConfig = {
+  secret: "thisshouldbeabettersecret",
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    httpOnly: true,
+    expires: Date.now() + 1000 * 60 * 60 * 24 * 7, // 1 week
+    maxAge: 1000 * 60 * 60 * 24 * 7,
+  },
+};
+
+app.use(session(sessionConfig));
+
 app.use("/campgrounds", campgroundRoutes);
 app.use("/campgrounds/:id/reviews", reviewRoutes);
-
-// const validateCampground = (req, res, next) => {
-//   const { error } = campgroundSchema.validate(req.body);
-
-//   if (error) {
-//     const msg = error.details.map((el) => el.message).join(", ");
-//     throw new ExpressError(msg, 400);
-//   }
-
-//   next();
-// };
 
 app.get("/", (req, res) => {
   res.render("home");
 });
-
-// const validateReview = (req, res, next) => {
-//   const { error } = reviewSchema.validate(req.body);
-//   if (error) {
-//     const msg = error.details.map((el) => el.message).join(", ");
-//     throw new ExpressError(msg, 400);
-//   }
-
-//   next();
-// };
 
 app.all("*", (req, res, next) => {
   next(new ExpressError("Page Not Found", 404));
