@@ -1,159 +1,203 @@
 <% layout("layouts/boilerplate") %>
 
 <div class="row">
-    <div class="col-md-8 offset-md-2">
+  <div class="col-md-8 offset-md-2">
 
-
-    <h1 class="mb-3"><%= campground.title %></h1>
+    <h1 class="mb-3">
+      <%= campground.title %>
+    </h1>
 
     <h5 class="fw-bold mb-3">
-        <%= campground.location %>
+      <%= campground.location %>
     </h5>
 
     <% for (let image of campground.images) { %>
-        <img
-            src="<%= image %>"
-            class="img-fluid rounded mb-3"
-            alt="<%= campground.title %>"
-        >
+      <img
+        src="<%= image %>"
+        class="img-fluid rounded mb-3"
+        alt="<%= campground.title %>"
+      >
     <% } %>
 
     <p class="mt-2">
-        <%= campground.description %>
+      <%= campground.description %>
     </p>
 
     <p class="fw-bold fs-5">
-        ₦<%= campground.price.toLocaleString() %>
+      ₦<%= campground.price.toLocaleString() %>
     </p>
 
+    <!-- Campground actions -->
     <div class="border-top pt-3 mt-4 mb-4">
-        <div class="d-flex gap-2">
+      <div class="d-flex gap-2">
 
-            <a
-                href="/campgrounds"
-                class="btn btn-secondary"
+        <a
+          href="/campgrounds"
+          class="btn btn-secondary"
+        >
+          Back to Campgrounds
+        </a>
+
+        <% if (currentUser && campground.author &&
+              campground.author._id.equals(currentUser._id)) { %>
+
+          <a
+            href="/campgrounds/<%= campground._id %>/edit"
+            class="btn btn-primary"
+          >
+            Edit
+          </a>
+
+          <form
+            action="/campgrounds/<%= campground._id %>?_method=DELETE"
+            method="POST"
+          >
+            <button
+              class="btn btn-danger"
+              type="submit"
             >
-                Back to Campgrounds
-            </a>
+              Delete
+            </button>
+          </form>
 
-            <a
-    href="/campgrounds/<%= campground._id %>/edit"
-    class="btn btn-warning"
->
-    Edit
-</a>
+        <% } %>
 
-            <form
-                action="/campgrounds/<%= campground._id %>?_method=DELETE"
-                method="POST"
-            >
-                <button
-                    class="btn btn-danger"
-                    type="submit"
-                >
-                    Delete
-                </button>
-            </form>
-
-        </div>
+      </div>
     </div>
 
-    <h2>Leave a review</h2>
+    <!-- Leave a review -->
+    <% if (currentUser) { %>
 
-    <form
+      <h2>Leave a review</h2>
+
+      <form
         action="/campgrounds/<%= campground._id %>/reviews"
         method="POST"
         class="mb-3 validated-form"
         novalidate
-    >
+      >
+
         <div class="mb-3">
-            <label for="customRange1" class="form-label">
-                Rating
-            </label>
+          <label
+            for="customRange1"
+            class="form-label"
+          >
+            Rating
+          </label>
 
-            <input
-                id="customRange1"
-                type="range"
-                min="1"
-                max="5"
-                name="review[rating]"
-                class="form-range"
-                required
-            >
+          <input
+            id="customRange1"
+            type="range"
+            min="1"
+            max="5"
+            name="review[rating]"
+            class="form-range"
+            required
+          >
 
-            <div class="invalid-feedback">
-                Please choose a rating.
-            </div>
+          <div class="invalid-feedback">
+            Please choose a rating.
+          </div>
         </div>
 
         <div class="mb-3">
-            <label class="form-label" for="reviewbody">
-                Review:
-            </label>
+          <label
+            class="form-label"
+            for="reviewbody"
+          >
+            Review:
+          </label>
 
-            <textarea
-                class="form-control"
-                name="review[body]"
-                id="reviewbody"
-                cols="30"
-                rows="3"
-                required
-            ></textarea>
+          <textarea
+            class="form-control"
+            name="review[body]"
+            id="reviewbody"
+            cols="30"
+            rows="3"
+            required
+          ></textarea>
 
-            <div class="invalid-feedback">
-                Please enter a review.
-            </div>
+          <div class="invalid-feedback">
+            Please enter a review.
+          </div>
         </div>
 
-        <button class="btn btn-success" type="submit">
-            Submit
+        <button
+          class="btn btn-success"
+          type="submit"
+        >
+          Submit
         </button>
-    </form>
 
-    <h2 class="mb-4">Reviews</h2>
-
-<div class="row">
-    <% if (campground.reviews.length === 0) { %>
-
-        <div class="col-12">
-            <div class="alert alert-light border">
-                No reviews yet. Be the first to leave a review!
-            </div>
-        </div>
+      </form>
 
     <% } else { %>
 
-        <% for (let review of campground.reviews) { %>
-            <div class="col-md-6 mb-4">
-                <div class="card shadow-sm h-100">
-                    <div class="card-body">
-
-                        <h5 class="card-title">
-                            Rating: <%= review.rating %>/5
-                        </h5>
-
-                        <p class="card-text">
-                            <%= review.body %>
-                        </p>
-
-                        <form
-                            action="/campgrounds/<%= campground._id %>/reviews/<%= review._id %>?_method=DELETE"
-                            method="POST"
-                        >
-                            <button
-                                class="btn btn-sm btn-danger"
-                                type="submit"
-                            >
-                                Delete
-                            </button>
-                        </form>
-
-                    </div>
-                </div>
-            </div>
-        <% } %>
+      <p class="text-muted">
+        <a href="/login">Log in</a> to leave a review.
+      </p>
 
     <% } %>
-</div>
 
+    <!-- Reviews -->
+    <h2 class="mb-4">Reviews</h2>
+
+    <div class="row">
+
+      <% if (campground.reviews.length === 0) { %>
+
+        <div class="col-12">
+          <div class="alert alert-light border">
+            No reviews yet. Be the first to leave a review!
+          </div>
+        </div>
+
+      <% } else { %>
+
+        <% for (let review of campground.reviews) { %>
+
+          <div class="col-md-6 mb-4">
+            <div class="card shadow-sm h-100">
+
+              <div class="card-body">
+
+                <h5 class="card-title">
+                  Rating: <%= review.rating %>/5
+                </h5>
+
+                <p class="card-text">
+                  <%= review.body %>
+                </p>
+
+                <% if (
+                  currentUser &&
+                  review.author &&
+                  review.author.equals(currentUser._id)
+                ) { %>
+
+                  <form
+                    action="/campgrounds/<%= campground._id %>/reviews/<%= review._id %>?_method=DELETE"
+                    method="POST"
+                  >
+                    <button
+                      class="btn btn-sm btn-danger"
+                      type="submit"
+                    >
+                      Delete
+                    </button>
+                  </form>
+
+                <% } %>
+
+              </div>
+            </div>
+          </div>
+
+        <% } %>
+
+      <% } %>
+
+    </div>
+
+  </div>
 </div>
