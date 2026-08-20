@@ -76,30 +76,35 @@
         class="mb-3 validated-form"
         novalidate>
 
+        
 
+       
+<div class="mb-3">
+  <label class="form-label">
+    Rating
+  </label>
 
-        <div class="mb-3">
-          <label
-            for="customRange1"
-            class="form-label"
-          >
-            Rating
-          </label>
+  <div class="star-rating">
+    <input type="radio" id="star5" name="review[rating]" value="5" required>
+    <label for="star5">★</label>
 
-          <input
-            id="customRange1"
-            type="range"
-            min="1"
-            max="5"
-            name="review[rating]"
-            class="form-range"
-            required
-          >
+    <input type="radio" id="star4" name="review[rating]" value="4">
+    <label for="star4">★</label>
 
-          <div class="invalid-feedback">
-            Please choose a rating.
-          </div>
-        </div>
+    <input type="radio" id="star3" name="review[rating]" value="3">
+    <label for="star3">★</label>
+
+    <input type="radio" id="star2" name="review[rating]" value="2">
+    <label for="star2">★</label>
+
+    <input type="radio" id="star1" name="review[rating]" value="1">
+    <label for="star1">★</label>
+  </div>
+
+  <div class="invalid-feedback">
+    Please choose a rating.
+  </div>
+</div>
 
         <div class="mb-3">
           <label
@@ -134,10 +139,10 @@
 
     <% } else { %>
 
-    <div class="alert alert-secondary d-flex justify-content-between align-items-center">
+      <div class="alert alert-secondary d-flex justify-content-between align-items-center">
     <span>Want to leave a review?</span>
     <a href="/login" class="btn btn-sm btn-outline-dark">Log in</a>
-  </div
+  </div>
     <% } %>
 
     
@@ -162,9 +167,15 @@
 
               <div class="card-body">
 
-                <h5 class="card-title">
-                  Rating: <%= review.rating %>/5
-                </h5>
+ <h5 class="card-title">
+  <% for (let i = 1; i <= 5; i++) { %>
+  <% if (i <= review.rating) { %>
+  <span class="text-warning">★</span>
+  <% } else { %>
+  <span class="text-muted">☆</span>
+  <% } %>
+  <% } %>
+</h5>
 
                 <p class="card-text">
                   <%= review.body %>
@@ -202,3 +213,24 @@
 
   </div>
 </div>
+
+<script>
+  const stars = document.querySelectorAll(
+    'input[name="review[rating]"]'
+  );
+
+  stars.forEach((star) => {
+    star.addEventListener("click", () => {
+      if (star.dataset.clicked === "true") {
+        star.checked = false;
+        star.dataset.clicked = "false";
+      } else {
+        stars.forEach((s) => {
+          s.dataset.clicked = "false";
+        });
+
+        star.dataset.clicked = "true";
+      }
+    });
+  });
+</script>

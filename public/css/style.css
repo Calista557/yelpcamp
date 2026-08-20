@@ -2,3 +2,24 @@ body {
     background: linear-gradient(135deg, #f4f1e8 0%, #e8e4d5 40%, #d9e8d5 100%);
     min-height: 100vh;
 }
+.star-rating {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+}
+
+.star-rating input {
+  display: none;
+}
+
+.star-rating label {
+  font-size: 2rem;
+  color: #ccc;
+  cursor: pointer;
+}
+
+.star-rating label:hover,
+.star-rating label:hover ~ label,
+.star-rating input:checked ~ label {
+  color: gold;
+}
