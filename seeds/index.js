@@ -38,6 +38,13 @@ const seedDB = async () => {
         cities[random1000].city,
         cities[random1000].state,
       ),
+      geometry: {
+        type: "Point",
+        coordinates: [
+          cities[random1000].longitude,
+          cities[random1000].latitude,
+        ],
+      },
       images: sampleImages(images),
       price: (Math.floor(Math.random() * 96) + 5) * 500,
     });

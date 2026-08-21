@@ -1,6 +1,8 @@
 const Campground = require("../models/campground");
 const ExpressError = require("../utils/ExpressError");
 const { cloudinary } = require("../cloudinary");
+const maptilerClient = require("@maptiler/client");
+maptilerClient.config.apiKey = process.env.MAPTILER_API_KEY;
 
 module.exports.index = async (req, res) => {
   const campgrounds = await Campground.find({});
@@ -12,8 +14,20 @@ module.exports.renderNewForm = (req, res) => {
 };
 
 module.exports.createCampground = async (req, res) => {
-  console.log(req.files);
+  const geoData = await maptilerClient.geocoding.forward(
+    req.body.campground.location,
+    { limit: 1 },
+  );
+  if (!geoData.features?.length) {
+    req.flash(
+      "error",
+      "Could not geocode that location. Please try again and enter a valid location.",
+    );
+    return res.redirect("/campgrounds/new");
+  }
   const campground = new Campground(req.body.campground);
+  campground.geometry = geoData.features[0].geometry;
+  campground.location = geoData.features[0].place_name;
   campground.images = req.files.map((file) => ({
     url: file.path,
     filename: file.filename,
@@ -48,6 +62,17 @@ module.exports.updateCampground = async (req, res) => {
   if (!campground) {
     throw new ExpressError("Campground not found", 404);
   }
+  const geoData = await maptilerClient.geocoding.forward(
+    req.body.campground.location,
+    { limit: 1 },
+  );
+  if (!geoData.features?.length) {
+    req.flash(
+      "error",
+      "Could not geocode that location. Please try again and enter a valid location.",
+    );
+    return res.redirect(`/campgrounds/${id}/edit`);
+  }
   const deleteImages = req.body.deleteImages || [];
   const imagesToDelete = Array.isArray(deleteImages)
     ? deleteImages
@@ -69,6 +94,8 @@ module.exports.updateCampground = async (req, res) => {
     return res.redirect(`/campgrounds/${campground._id}/edit`);
   }
   Object.assign(campground, req.body.campground);
+  campground.geometry = geoData.features[0].geometry;
+  campground.location = geoData.features[0].place_name;
   await campground.save();
   for (let filename of imagesToDelete) {
     await cloudinary.uploader.destroy(filename);
