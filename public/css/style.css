@@ -23,3 +23,25 @@ body {
 .star-rating input:checked ~ label {
   color: gold;
 }
+
+#images {
+  display: none;
+}
+
+.custom-file-upload {
+  display: inline-block;
+  padding: 10px 18px;
+  background: #212529;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.custom-file-upload:hover {
+  opacity: 0.9;
+}
+
+#file-name {
+  margin-left: 10px;
+  color: #6c757d;
+}

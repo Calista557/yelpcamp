@@ -11,13 +11,60 @@
       <%= campground.location %>
     </h5>
 
-<% for (let image of campground.images) { %>
-  <img
-    src="<%= image.url %>"
-    class="img-fluid rounded mb-3"
-    alt="<%= campground.title %>"
+<div
+  id="campgroundCarousel"
+  class="carousel slide mb-4"
+  data-bs-wrap="false"
+>
+
+  <div class="carousel-indicators">
+    <% campground.images.slice(0, 4).forEach((image, i) => { %>
+      <button
+        type="button"
+        data-bs-target="#campgroundCarousel"
+        data-bs-slide-to="<%= i %>"
+        class="<%= i === 0 ? 'active' : '' %>"
+        aria-current="<%= i === 0 ? 'true' : 'false' %>"
+        aria-label="Slide <%= i + 1 %>"
+      ></button>
+    <% }) %>
+  </div>
+
+
+  <div class="carousel-inner">
+    <% campground.images.slice(0, 4).forEach((image, i) => { %>
+      <div class="carousel-item <%= i === 0 ? 'active' : '' %>">
+        <img
+          src="<%= image.url %>"
+          class="d-block w-100 rounded"
+          alt="<%= campground.title %>"
+        >
+      </div>
+    <% }) %>
+  </div>
+
+
+  <button
+    class="carousel-control-prev"
+    type="button"
+    data-bs-target="#campgroundCarousel"
+    data-bs-slide="prev"
   >
-<% } %>
+    <span class="carousel-control-prev-icon"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+
+
+  <button
+    class="carousel-control-next"
+    type="button"
+    data-bs-target="#campgroundCarousel"
+    data-bs-slide="next"
+  >
+    <span class="carousel-control-next-icon"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
 
     <p class="mt-2">
       <%= campground.description %>

@@ -22,6 +22,11 @@ module.exports.campgroundSchema = Joi.object({
       "string.min": "Description must be at least 10 characters",
     }),
   }).required(),
+
+  deleteImages: Joi.alternatives().try(
+    Joi.string(),
+    Joi.array().items(Joi.string()),
+  ),
 });
 
 module.exports.reviewSchema = Joi.object({

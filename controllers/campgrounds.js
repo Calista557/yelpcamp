@@ -1,5 +1,6 @@
 const Campground = require("../models/campground");
 const ExpressError = require("../utils/ExpressError");
+const { cloudinary } = require("../cloudinary");
 
 module.exports.index = async (req, res) => {
   const campgrounds = await Campground.find({});
@@ -43,17 +44,34 @@ module.exports.showCampground = async (req, res) => {
 
 module.exports.updateCampground = async (req, res) => {
   const { id } = req.params;
-
-  const campground = await Campground.findByIdAndUpdate(
-    id,
-    req.body.campground,
-    {
-      runValidators: true,
-      new: true,
-    },
-  );
+  const campground = await Campground.findById(id);
   if (!campground) {
     throw new ExpressError("Campground not found", 404);
+  }
+  const deleteImages = req.body.deleteImages || [];
+  const imagesToDelete = Array.isArray(deleteImages)
+    ? deleteImages
+    : [deleteImages];
+  campground.images = campground.images.filter(
+    (image) => !imagesToDelete.includes(image.filename),
+  );
+  const newImages = req.files ? req.files.length : 0;
+  if (newImages > 0) {
+    campground.images.push(
+      ...req.files.map((file) => ({
+        url: file.path,
+        filename: file.filename,
+      })),
+    );
+  }
+  if (campground.images.length > 4) {
+    req.flash("error", "You can only have 4 images total.");
+    return res.redirect(`/campgrounds/${campground._id}/edit`);
+  }
+  Object.assign(campground, req.body.campground);
+  await campground.save();
+  for (let filename of imagesToDelete) {
+    await cloudinary.uploader.destroy(filename);
   }
   req.flash("success", "Successfully updated the campground!");
   res.redirect(`/campgrounds/${campground._id}`);
