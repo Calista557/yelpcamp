@@ -11,13 +11,13 @@
       <%= campground.location %>
     </h5>
 
-    <% for (let image of campground.images) { %>
-      <img
-        src="<%= image %>"
-        class="img-fluid rounded mb-3"
-        alt="<%= campground.title %>"
-      >
-    <% } %>
+<% for (let image of campground.images) { %>
+  <img
+    src="<%= image.url %>"
+    class="img-fluid rounded mb-3"
+    alt="<%= campground.title %>"
+  >
+<% } %>
 
     <p class="mt-2">
       <%= campground.description %>
