@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-
+const { upload } = require("../utils/multer");
 const catchAsync = require("../utils/catchAsync");
 const { campgroundSchema } = require("../schemas.js");
 const ExpressError = require("../utils/ExpressError");
@@ -23,6 +23,7 @@ router
   .get(catchAsync(campgrounds.index))
   .post(
     isLoggedIn,
+    upload.single("image"),
     validateCampground,
     catchAsync(campgrounds.createCampground),
   );

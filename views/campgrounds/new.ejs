@@ -1,124 +1,106 @@
 <% layout("layouts/boilerplate") %>
 
 <div class="row">
-    <h1 class="text-center mb-4">New Campground</h1>
+  <h1 class="text-center mb-4">New Campground</h1>
 
-    <div class="col-6 offset-3 mb-4">
+  <div class="col-6 offset-3 mb-4">
+    <form
+      action="/campgrounds"
+      method="POST"
+      enctype="multipart/form-data"
+      novalidate
+      class="validated-form"
+    >
+      <div class="mb-3">
+        <label class="form-label" for="title">Title</label>
+        <input
+          class="form-control"
+          type="text"
+          id="title"
+          name="campground[title]"
+          placeholder="Campground title"
+          required
+        />
 
-        <form action="/campgrounds" method="POST" novalidate class="validated-form">
+        <div class="valid-feedback">Looks good!</div>
 
-            <div class="mb-3">
-                <label class="form-label" for="title">Title</label>
-                <input
-                    class="form-control"
-                    type="text"
-                    id="title"
-                    name="campground[title]"
-                    placeholder="Campground title"
-                    required
-                >
+        <div class="invalid-feedback">Please provide a campground title.</div>
+      </div>
 
-                <div class="valid-feedback">
-                    Looks good!
-                </div>
+      <div class="mb-3">
+        <label class="form-label" for="location">Location</label>
+        <input
+          class="form-control"
+          type="text"
+          id="location"
+          name="campground[location]"
+          placeholder="Campground location"
+          required
+        />
 
-                <div class="invalid-feedback">
-                    Please provide a campground title.
-                </div>
-            </div>
+        <div class="valid-feedback">Looks good!</div>
 
-            <div class="mb-3">
-                <label class="form-label" for="location">Location</label>
-                <input
-                    class="form-control"
-                    type="text"
-                    id="location"
-                    name="campground[location]"
-                    placeholder="Campground location"
-                    required
-                >
+        <div class="invalid-feedback">
+          Please provide a campground location.
+        </div>
+      </div>
 
-                <div class="valid-feedback">
-                    Looks good!
-                </div>
+      <div class="mb-3">
+        <label class="form-label" for="price">Price</label>
+        <input
+          class="form-control"
+          type="number"
+          id="price"
+          name="campground[price]"
+          placeholder="Price"
+          min="0"
+          required
+        />
 
-                <div class="invalid-feedback">
-                    Please provide a campground location.
-                </div>
-            </div>
+        <div class="valid-feedback">Looks good!</div>
 
-            <div class="mb-3">
-                <label class="form-label" for="price">Price</label>
-                <input
-                    class="form-control"
-                    type="number"
-                    id="price"
-                    name="campground[price]"
-                    placeholder="Price"
-                    min="0"
-                    required
-                >
+        <div class="invalid-feedback">Please provide a valid price.</div>
+      </div>
 
-                <div class="valid-feedback">
-                    Looks good!
-                </div>
+      <div class="mb-3">
+        <label class="form-label" for="description">Description</label>
+        <textarea
+          class="form-control"
+          id="description"
+          name="campground[description]"
+          rows="4"
+          placeholder="Describe the campground"
+          required
+        ></textarea>
 
-                <div class="invalid-feedback">
-                    Please provide a valid price.
-                </div>
-            </div>
+        <div class="valid-feedback">Looks good!</div>
 
-            <div class="mb-3">
-                <label class="form-label" for="description">Description</label>
-                <textarea
-                    class="form-control"
-                    id="description"
-                    name="campground[description]"
-                    rows="4"
-                    placeholder="Describe the campground"
-                    required
-                ></textarea>
+        <div class="invalid-feedback">Please provide a description.</div>
+      </div>
 
-                <div class="valid-feedback">
-                    Looks good!
-                </div>
+      <div class="mb-3">
+        <label class="form-label" for="images">Campground Image</label>
+        <input
+          class="form-control"
+          type="file"
+          id="images"
+          name="image"
+          accept="image/*"
+          required
+        />
 
-                <div class="invalid-feedback">
-                    Please provide a description.
-                </div>
-            </div>
+        <div class="valid-feedback">Looks good!</div>
 
-            <div class="mb-3">
-                <label class="form-label" for="images">Image URL</label>
-                <input
-                    class="form-control"
-                    type="text"
-                    id="images"
-                    name="campground[images]"
-                    placeholder="https://example.com/image.jpg"
-                    required
-                >
+        <div class="invalid-feedback">Please select an image.</div>
+      </div>
 
-                <div class="valid-feedback">
-                    Looks good!
-                </div>
+      <div class="d-flex justify-content-between">
+        <button class="btn btn-success" type="submit">Add Campground</button>
 
-                <div class="invalid-feedback">
-                    Please provide an image URL.
-                </div>
-            </div>
-
-            <div class="d-flex justify-content-between">
-                <button class="btn btn-success" type="submit">
-                    Add Campground
-                </button>
-
-                <a href="/campgrounds" class="btn btn-secondary">
-                    Back to Campgrounds
-                </a>
-            </div>
-
-        </form>
-
-    </div>
+        <a href="/campgrounds" class="btn btn-secondary">
+          Back to Campgrounds
+        </a>
+      </div>
+    </form>
+  </div>
 </div>

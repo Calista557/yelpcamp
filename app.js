@@ -12,6 +12,8 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user");
 const userRoutes = require("./routes/users");
+const multer = require("multer");
+const upload = multer({ dest: "uploads/" });
 
 mongoose.connect("mongodb://127.0.0.1:27017/yelp-camp");
 
@@ -30,6 +32,7 @@ app.set("views", path.join(__dirname, "views"));
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "public")));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 const sessionConfig = {
   secret: "thisshouldbeabettersecret",
@@ -64,6 +67,18 @@ app.use("/campgrounds/:id/reviews", reviewRoutes);
 
 app.get("/", (req, res) => {
   res.render("home");
+});
+
+app.get("/upload", (req, res) => {
+  res.send(`<form action="/upload" method="POST" enctype="multipart/form-data">
+<input type="file" name="image">
+<button type="submit">Upload</button>
+</form>`);
+});
+
+app.post("/upload", upload.single("image"), (req, res) => {
+  console.log(req.file);
+  res.send("Image uploaded!");
 });
 
 app.all("*", (req, res, next) => {

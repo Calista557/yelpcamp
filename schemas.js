@@ -21,10 +21,6 @@ module.exports.campgroundSchema = Joi.object({
       "string.empty": "Description is required",
       "string.min": "Description must be at least 10 characters",
     }),
-
-    images: Joi.string().required().messages({
-      "string.empty": "Image URL is required",
-    }),
   }).required(),
 });
 
