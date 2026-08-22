@@ -5,10 +5,19 @@ const maptilerClient = require("@maptiler/client");
 maptilerClient.config.apiKey = process.env.MAPTILER_API_KEY;
 
 module.exports.index = async (req, res) => {
-  const campgrounds = await Campground.find({});
-  res.render("campgrounds/index", { campgrounds });
+  const { search = "" } = req.query;
+  const campgrounds = await Campground.find({
+    $or: [
+      { title: { $regex: search, $options: "i" } },
+      { location: { $regex: search, $options: "i" } },
+      { description: { $regex: search, $options: "i" } },
+    ],
+  });
+  res.render("campgrounds/index", {
+    campgrounds,
+    search,
+  });
 };
-
 module.exports.renderNewForm = (req, res) => {
   res.render("campgrounds/new");
 };

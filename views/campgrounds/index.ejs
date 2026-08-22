@@ -2,7 +2,30 @@
 
 <div id="map" style="width: 100%; height: 500px"></div>
 
-<h1 class="text-center mb-4">Campgrounds</h1>
+<h1 class="text-center mb-4">Search and View Our Campgrounds</h1>
+
+<form
+  action="/campgrounds"
+  method="GET"
+  class="d-flex justify-content-center mb-4"
+>
+  <div class="input-group" style="max-width: 600px;">
+    <input
+      type="search"
+      name="search"
+      class="form-control"
+      placeholder="Search campgrounds..."
+      value="<%= search || '' %>"
+    />
+
+    <button
+      class="btn btn-primary"
+      type="submit"
+    >
+      Search
+    </button>
+  </div>
+</form>
 
 <% for (let campground of campgrounds) { %>
 

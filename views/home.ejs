@@ -1,2 +1,192 @@
-<% layout("layouts/boilerplate") %>
-  <h1>Welcome home</h1>  
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+     <link rel="stylesheet" href="/css/style.css" />
+    <script src="https://cdn.maptiler.com/maptiler-sdk-js/v3.6.1/maptiler-sdk.umd.min.js"></script>
+  </head>
+  <body>
+
+  <div class="home">
+
+    <nav class="navbar navbar-expand-lg navbar-dark home-navbar">
+    <div class="container">
+
+        <a class="navbar-brand fw-bold" href="/">
+            Yelp<span>Camp</span>
+        </a>
+
+        <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNav"
+            aria-controls="navbarNav"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+        >
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+
+            <ul class="navbar-nav mx-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" href="/">Home</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/campgrounds">
+                        Campgrounds
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/campgrounds">
+                        Map
+                    </a>
+                </li>
+            </ul>
+
+            <div class="d-flex align-items-center gap-3">
+
+                <% if (!currentUser) { %>
+
+                    <a href="/login" class="nav-login">
+                        Login
+                    </a>
+
+                    <a href="/register" class="btn nav-signup">
+                        Sign Up
+                    </a>
+
+                <% } else { %>
+
+                    <a href="/logout" class="nav-login">
+                        Logout
+                    </a>
+
+                <% } %>
+
+            </div>
+
+        </div>
+    </div>
+</nav>
+<section class="hero">
+  
+        <p class="hero-eyebrow">WELCOME TO YelpCamp</p>
+
+        <h1 >Find Your Next Great Escape</h1>
+
+        <p class="hero-text">
+            Discover beautiful Campgrounds, explore new places,
+            and find the perfect spot for your next adventure in Nigeria.
+        </p>
+
+        <a href="/campgrounds" class="btn btn-light btn-lg hero-btn">
+            Explore Campgrounds
+        </a>
+       
+</section>
+
+  </div>
+<section class="fct">
+  <div class="feature-header">
+    <p>EXPLORE. DISCOVER. ESCAPE.</p>
+    <h2>Everything you need for your next adventure</h2>
+    <p>YelpCamp makes it easy to discover campgrounds, explore locations on the map, and hear from other campers.</p>
+  </div>
+
+  <div class="feature-grid">
+    <div class="feature-box">
+      <h3>Discover</h3>
+      <p>Find beautiful campgrounds and discover new places to explore.</p>
+    </div>
+
+    <div class="feature-box">
+      <h3>Explore</h3>
+      <p>Use our interactive map to find campgrounds and explore their locations.</p>
+    </div>
+
+    <div class="feature-box">
+      <h3>Share Your Experience</h3>
+      <p>Read reviews from other campers and share your own experience.</p>
+    </div>
+  </div>
+</section>
+<section class="featured">
+  <div class="container">
+
+    <div class="featured-heading d-flex justify-content-between align-items-end">
+      <div>
+        <p class="featured-eyebrow">FEATURED CAMPGROUNDS</p>
+        <h2>Popular Destinations</h2>
+       
+      </div>
+
+      <a href="/campgrounds" class="view-all-link">
+        View All Campgrounds <span>&rarr;</span>
+      </a>
+    </div>
+
+    <div class="row g-4">
+      <% campgrounds.slice(0, 3).forEach(camp => { %>
+        <div class="col-md-4">
+          <div class="featured-card">
+            <a href="/campgrounds/<%= camp._id %>">
+              <img
+                src="<%= camp.images[0].url %>"
+                alt="<%= camp.title %>"
+              />
+            </a>
+            <div class="featured-card-body">
+              <h3><%= camp.title %></h3>
+              <p class="featured-location">
+                <%= camp.location %>
+              </p>
+              <div class="featured-info">
+                <span class="stars">
+                  <% for (let i = 1; i <= 5; i++) { %>
+                    <i class="bi <%= i <= Math.round(camp.avgRating) ? 'bi-star-fill' : 'bi-star' %>"></i>
+                  <% } %>
+                </span>
+                <span class="price">₦<%= camp.price.toLocaleString() %> / night</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+
+  </div>
+</section>
+<section class="cta">
+  <h1>Ready for your next adventure?</h1>
+  <p>Join YelpCamp today and start exploring amazing campgrounds</p>
+  <a href="/register" class="cta-btn">Get Started</a>
+</section>
+<footer class="site-footer">
+  <div class="container text-center">
+    <p class="footer-line">
+      <span class="footer-brand">Yelp<span>Camp</span></span>
+      <span class="dot">•</span>
+      Discover. Explore. Share.
+      <span class="dot">•</span>
+      Built with <span class="heart">♥</span> for campers
+      <span class="dot">•</span>
+      &copy; 2026 YelpCamp. All rights reserved.
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

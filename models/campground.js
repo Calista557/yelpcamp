@@ -58,13 +58,53 @@ const CampgroundSchema = new Schema(
 );
 
 CampgroundSchema.virtual("properties.popUpMarkup").get(function () {
+  const image = this.images?.[0]?.url;
+
   return `
-    <strong>
-      <a href="/campgrounds/${this._id}">
-        ${this.title}
+    <div style="width: 220px;">
+      ${
+        image
+          ? `
+            <img
+              src="${image}"
+              alt="${this.title}"
+              style="
+                width: 100%;
+                height: 120px;
+                object-fit: cover;
+                border-radius: 6px;
+                margin-bottom: 10px;
+              "
+            >
+          `
+          : ""
+      }
+
+      <h5 style="margin-bottom: 8px;">
+        <a href="/campgrounds/${this._id}">
+          ${this.title}
+        </a>
+      </h5>
+
+      <p style="margin-bottom: 8px;">
+        ${this.location}
+      </p>
+
+      <p style="margin-bottom: 10px;">
+        ${this.description.substring(0, 80)}...
+      </p>
+
+      <p style="font-weight: bold; margin-bottom: 10px;">
+        ₦${this.price.toLocaleString()}
+      </p>
+
+      <a
+        href="/campgrounds/${this._id}"
+        class="btn btn-primary btn-sm"
+      >
+        View Campground
       </a>
-    </strong>
-    <p>${this.description.substring(0, 20)}...</p>
+    </div>
   `;
 });
 
@@ -74,6 +114,13 @@ CampgroundSchema.post("findOneAndDelete", async function (doc) {
       _id: { $in: doc.reviews },
     });
   }
+});
+
+CampgroundSchema.virtual("avgRating").get(function () {
+  if (!this.reviews || this.reviews.length === 0) return 0;
+
+  const total = this.reviews.reduce((sum, review) => sum + review.rating, 0);
+  return total / this.reviews.length;
 });
 
 module.exports = mongoose.model("Campground", CampgroundSchema);
